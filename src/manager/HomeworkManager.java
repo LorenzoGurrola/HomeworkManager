@@ -1,66 +1,57 @@
 package manager;
 
 import java.util.Scanner;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.File;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class HomeworkManager {
+    Scanner scanner = new Scanner(System.in);
+    FileManager fileManager = new FileManager();
+    
+    String namePath = "name.txt";
+    String assignmentsPath = "assignments.txt";
+
+    ArrayList<Assignment> assignments = new ArrayList<>();
+
     public HomeworkManager() {
-        greet();
+        loadAssignments();
+        Assignment assignment1 = new Assignment("Essay","English 101", LocalDateTime.of(2024, 5, 4, 12, 00));
+        assignments.add(assignment1);
+        saveAssignments();
     }
 
     public static void main(String[] args) {
         HomeworkManager homeworkManager = new HomeworkManager();
     }
 
-    private void writeToFile(String filePath, String content) {
-        try (FileWriter fileWriter = new FileWriter(filePath, true);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)) {
-
-            bufferedWriter.write(content);
-            System.out.println("String was saved successfully!");
-        } catch (IOException e) {
-            System.out.println("An error while writing this file occurred:");
-            e.printStackTrace();
-        }
-    }
-
-    private void readFromFile(String filePath) {
-        StringBuilder contentBuilder = new StringBuilder();
-        try (FileReader fileReader = new FileReader(filePath);
-            BufferedReader bufferedReader = new BufferedReader(fileReader)) {
-            
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                contentBuilder.append(line);
-                contentBuilder.append(System.lineSeparator()); // preserve line breaks
-            }
-
-            System.out.println("File content read successfully:");
-            System.out.println(contentBuilder.toString());
-        } catch (IOException e) {
-            System.out.println("An error while reading this file occurred:");
-            e.printStackTrace();
-        }
-    }
-
     private void greet() {
-        Scanner scanner = new Scanner(System.in);
-        File file = new File("name.txt");
+        File file = new File(namePath);
         if(!file.exists()) {
             createName();
         }
-        //continue greeting
+        String name = fileManager.readFromFile(namePath);
+        System.out.println("Hey " + name + "!");
     }
 
     private void createName() {
-        
+        System.out.println("Hey! Welcome to the Homework Manager! What is your name?");
+        String input = scanner.nextLine();
+        fileManager.writeToFile(input, namePath);
     }
 
-    
+    private void loadAssignments() {
+        File file = new File(assignmentsPath);
+        if(!file.exists()) {
+            fileManager.serialize(new ArrayList<Assignment>(), assignmentsPath);
+        }
+        assignments = fileManager.deserialize(assignmentsPath);
+        System.out.println(assignments);
+    }
+
+    private void saveAssignments() {
+        fileManager.serialize(assignments, assignmentsPath);
+    }
 }
