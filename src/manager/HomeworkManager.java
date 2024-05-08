@@ -11,15 +11,19 @@ import java.util.Random;
 
 public class HomeworkManager {
     private Scanner scanner = new Scanner(System.in);
-    private InputManager inputManager = new InputManager(this);
+    private InputManager inputManager = new InputManager();
     private Random random = new Random();
     
     private String namePath = "name.txt";
     private String assignmentsPath = "assignments.txt";
 
-    private ArrayList<Assignment> assignments = new ArrayList<>();
-
     public HomeworkManager() {
+        inputManager.addAssignment("Ceramic Piece", "Pottery 101", 
+                                   LocalDateTime.of(2024, 5, 21, 12, 0, 0));
+        inputManager.addAssignment("500 Word Paper", "English 101", 
+                                   LocalDateTime.of(2024, 5, 15, 3, 20, 0));
+        inputManager.addAssignment("Data Science Final", "Intro to Data Science", 
+                                   LocalDateTime.of(2024, 6, 1, 12, 0));
         greet();
         inputManager.mainCycle();
         scanner.close();
@@ -63,12 +67,5 @@ public class HomeworkManager {
         }
     }
 
-    public void addAssignment(String name, String className, LocalDateTime dueDate) {
-        Assignment assignment = new Assignment(name, className, dueDate);
-        assignments.add(assignment);
-    }
-
-    public ArrayList<Assignment> getAssignments() {
-        return assignments;
-    }
+    
 }

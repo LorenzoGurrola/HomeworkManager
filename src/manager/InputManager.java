@@ -5,79 +5,89 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class InputManager {
-    private Scanner scanner = new Scanner(System.in);
-    private HomeworkManager homeworkManager;
-
-    public InputManager(HomeworkManager homeworkManager) {
-        this.homeworkManager = homeworkManager;
-    }
+    Scanner scanner = new Scanner(System.in);
+    private ArrayList<Assignment> assignments = new ArrayList<>();
    
     public void mainCycle() {
-        
-        System.out.println("Please enter your command, or type 'help': ");
-        String input = scanner.nextLine();
+        String input = getInput("Please enter your command, or type 'help': ");
         runCommand(input);
         mainCycle();
+    }
+
+    private String getInput(String prompt) {
+        System.out.println(prompt);
+        return scanner.nextLine();
+    }
+
+    private int getIntInput(String prompt) {
+        System.out.println(prompt);
+        return scanner.nextInt();
     }
 
     private void runCommand(String input) {
         switch(input) {
             case "help":
                 helpCommand();
+                break;
             case "add":
                 addCommand();
+                break;
             case "due":
                 dueCommand();
+                break;
             case "complete":
                 completeCommand();
+                break;
             case "quit":
                 quitCommand();
+                break;
             case "cancel":
                 cancelCommand();
+                break;
+            default:
+                break;
         }
     }
 
     private void helpCommand() {
-        System.out.println("\n");
         System.out.println(FileManager.readFromFile("help.txt"));
     }
 
     private void addCommand() {
-        System.out.println();
-        System.out.println("What is the name of the assignment: ");
-        String name = scanner.nextLine();
-        System.out.println("What is the name of the class: ");
-        String className = scanner.nextLine();
-        System.out.println("What year is this due: ");
-        int year = scanner.nextInt();
-        System.out.println("What month is this due (as a number, please): ");
-        int month = scanner.nextInt();
-        System.out.println("What day of the month is this due: ");
-        int day = scanner.nextInt();
-        System.out.println("What hour is this due (use military time, please): ");
-        int hour = scanner.nextInt();
-        System.out.println("What minute of the hour is this due: ");
-        int minute = scanner.nextInt();
+        String name = getInput("What is the name of the assignment: ");
+        String className = getInput("What is the name of the class: ");
+        int year = getIntInput("What year is this due: ");
+        int month = getIntInput("What month is this due (as a number, please): ");
+        int day = getIntInput("What day of the month is this due: ");
+        int hour = getIntInput("What hour is this due (use military time, please): ");
+        int minute = getIntInput("What minute of the hour is this due: ");
 
         LocalDateTime date = LocalDateTime.of(year, month, day, hour, minute);
-        homeworkManager.addAssignment(name, className, date);
-        ArrayList<Assignment> assignments = homeworkManager.getAssignments();
+        addAssignment(name, className, date);
 
-        System.out.println("Current Assignments: ");
-        for (Assignment assignment : assignments) {
-            System.out.println(assignment.getName());
-            System.out.println(assignment.getClassName());
-            System.out.println(assignment.getDueDate());
-        }
-        
+        System.out.println("Successfully added.");
     }
 
     private void dueCommand() {
-
+        
+        for (Assignment assignment : assignments) {
+            System.out.println();
+            System.out.println("Name of assignment: " + assignment.getName());
+            System.out.println("Class name: " + assignment.getClassName());
+            System.out.println("Due on: " + assignment.getDueDate());
+        }
     }
 
-    private void completeCommand() {
+    private void completeCommand() {    
+        String assignmentDisplay = "";
+        int counter = 1;
 
+        for (Assignment assignment : assignments) {
+            String toAdd = "\n" + counter + ". " + assignment.getName();
+            assignmentDisplay += toAdd;
+        }
+
+        int assignmentToDelete = getIntInput("Which of these assignments did you complete (enter a number, please): " + assignmentDisplay);
     }
 
     private void quitCommand() {
@@ -87,4 +97,10 @@ public class InputManager {
     private void cancelCommand() {
 
     }
+
+    public void addAssignment(String name, String className, LocalDateTime dueDate) {
+        Assignment assignment = new Assignment(name, className, dueDate);
+        assignments.add(assignment);
+    }
+
 }
