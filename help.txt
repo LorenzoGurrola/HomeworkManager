@@ -1,0 +1,6 @@
+help: displays commands
+add: adds an assignment
+due: checks upcoming due dates
+complete: completes an assignment
+quit: quits the application
+cancel: cancels an operation

@@ -2,25 +2,27 @@ package manager;
 
 import java.util.Scanner;
 import java.io.File;
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class HomeworkManager {
-    Scanner scanner = new Scanner(System.in);
-    FileManager fileManager = new FileManager();
+    private Scanner scanner = new Scanner(System.in);
+    private InputManager inputManager = new InputManager(this);
+    private Random random = new Random();
     
-    String namePath = "name.txt";
-    String assignmentsPath = "assignments.txt";
+    private String namePath = "name.txt";
+    private String assignmentsPath = "assignments.txt";
 
-    ArrayList<Assignment> assignments = new ArrayList<>();
+    private ArrayList<Assignment> assignments = new ArrayList<>();
 
     public HomeworkManager() {
-        loadAssignments();
-        Assignment assignment1 = new Assignment("Essay","English 101", LocalDateTime.of(2024, 5, 4, 12, 00));
-        assignments.add(assignment1);
-        saveAssignments();
+        greet();
+        inputManager.mainCycle();
+        scanner.close();
     }
 
     public static void main(String[] args) {
@@ -32,26 +34,41 @@ public class HomeworkManager {
         if(!file.exists()) {
             createName();
         }
-        String name = fileManager.readFromFile(namePath);
-        System.out.println("Hey " + name + "!");
+        String name = FileManager.readSingleLine(namePath);
+        String greeting = chooseGreeting();
+        System.out.println("\n" + greeting + " " + name + ".");
     }
 
     private void createName() {
         System.out.println("Hey! Welcome to the Homework Manager! What is your name?");
         String input = scanner.nextLine();
-        fileManager.writeToFile(input, namePath);
+        FileManager.writeToFile(input, namePath);
     }
 
-    private void loadAssignments() {
-        File file = new File(assignmentsPath);
-        if(!file.exists()) {
-            fileManager.serialize(new ArrayList<Assignment>(), assignmentsPath);
+    private String chooseGreeting() {
+        int n = random.nextInt(5);
+        switch(n) {
+            case 0:
+                return "Hey";
+            case 1:
+                return "Greetings";
+            case 2:
+                return "Salutations";
+            case 3:
+                return "Hello";
+            case 4:
+                return "How are you doing";
+            default:
+                return "Hey";
         }
-        assignments = fileManager.deserialize(assignmentsPath);
-        System.out.println(assignments);
     }
 
-    private void saveAssignments() {
-        fileManager.serialize(assignments, assignmentsPath);
+    public void addAssignment(String name, String className, LocalDateTime dueDate) {
+        Assignment assignment = new Assignment(name, className, dueDate);
+        assignments.add(assignment);
+    }
+
+    public ArrayList<Assignment> getAssignments() {
+        return assignments;
     }
 }
