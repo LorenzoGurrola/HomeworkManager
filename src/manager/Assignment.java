@@ -13,6 +13,7 @@ public class Assignment implements Serializable{
         this.name = name;
         this.className = className;
         this.dueDate = dueDate;
+        this.id = id;
     }
 
     public String getName() {
@@ -25,6 +26,10 @@ public class Assignment implements Serializable{
 
     public LocalDateTime getDueDate() {
         return dueDate;
+    }
+
+    public int getId() {
+        return id;
     }
     
 }

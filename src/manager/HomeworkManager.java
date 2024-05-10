@@ -15,15 +15,8 @@ public class HomeworkManager {
     private Random random = new Random();
     
     private String namePath = "name.txt";
-    private String assignmentsPath = "assignments.txt";
 
     public HomeworkManager() {
-        inputManager.addAssignment("Ceramic Piece", "Pottery 101", 
-                                   LocalDateTime.of(2024, 5, 21, 12, 0, 0));
-        inputManager.addAssignment("500 Word Paper", "English 101", 
-                                   LocalDateTime.of(2024, 5, 15, 3, 20, 0));
-        inputManager.addAssignment("Data Science Final", "Intro to Data Science", 
-                                   LocalDateTime.of(2024, 6, 1, 12, 0));
         greet();
         inputManager.mainCycle();
         scanner.close();
@@ -46,7 +39,7 @@ public class HomeworkManager {
     private void createName() {
         System.out.println("Hey! Welcome to the Homework Manager! What is your name?");
         String input = scanner.nextLine();
-        FileManager.writeToFile(input, namePath);
+        FileManager.writeToFile(input, namePath, false, false);
     }
 
     private String chooseGreeting() {
