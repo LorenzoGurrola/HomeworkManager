@@ -85,9 +85,12 @@ public class InputManager {
         for (Assignment assignment : assignments) {
             String toAdd = "\n" + counter + ". " + assignment.getName();
             assignmentDisplay += toAdd;
+            counter ++;
         }
 
         int assignmentToDelete = getIntInput("Which of these assignments did you complete (enter a number, please): " + assignmentDisplay);
+
+        
     }
 
     private void quitCommand() {
