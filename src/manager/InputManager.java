@@ -1,9 +1,11 @@
 package manager;
 
 import java.io.File;
+import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
+
 
 public class InputManager {
     Scanner scanner = new Scanner(System.in);
@@ -13,14 +15,6 @@ public class InputManager {
 
     public InputManager() {
         this.assignments = FileManager.loadAssignments(assignmentsPath);
-        // FileManager.writeToFile("", assignmentsPath, false, false);
-        // addAssignment("Ceramic Piece", "Pottery 101", 
-        //                    LocalDateTime.of(2024, 5, 21, 12, 0, 0));
-        // addAssignment("500 Word Paper", "English 101", 
-        //                    LocalDateTime.of(2024, 5, 15, 3, 20, 0));
-        // addAssignment("Data Science Final", "Intro to Data Science", 
-        //                     LocalDateTime.of(2024, 6, 1, 12, 0));
-        FileManager.saveAssignments(assignments, assignmentsPath);
     }
    
     public void mainCycle() {
@@ -87,8 +81,9 @@ public class InputManager {
         for (Assignment assignment : assignments) {
             System.out.println();
             System.out.println("Assignment " + assignment.getId() + ": " + assignment.getName());
-            System.out.println("Due on: " + assignment.getDueDate());
-            System.out.println("ID: " + assignment.getId());
+            System.out.println("Due on " + DateFormatter.DueOn(assignment.getDueDate()));
+            System.out.println("Due in " + DateFormatter.DueIn(assignment.getDueDate()));
+            System.out.println("For your " + assignment.getClassName() + " class");
         }
     }
 

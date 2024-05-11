@@ -91,21 +91,4 @@ public class FileManager {
         }
         return assignments;
     }
-
-    // public static void serialize(ArrayList<Assignment> list, String filename) {
-    //     try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(filename))) {
-    //         out.writeObject(list);
-    //     } catch (IOException e) {
-    //         e.printStackTrace();
-    //     }
-    // }
-
-    // public static ArrayList<Assignment> deserialize(String filename) {
-    //     try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(filename))) {
-    //         return (ArrayList<Assignment>) in.readObject();
-    //     } catch (ClassNotFoundException | IOException e) {
-    //         e.printStackTrace();
-    //         return null;
-    //     }
-    // }
 }
