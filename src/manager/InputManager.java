@@ -4,6 +4,7 @@ import java.io.File;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
@@ -24,13 +25,21 @@ public class InputManager {
     }
 
     private String getInput(String prompt) {
+        System.out.println();
         System.out.println(prompt);
         return scanner.nextLine();
     }
 
     private int getIntInput(String prompt) {
+        System.out.println();
         System.out.println(prompt);
-        return scanner.nextInt();
+        try {
+            int intInput = scanner.nextInt();
+            return intInput;
+        }
+        catch (InputMismatchException e) {
+            System.out.println("Please enter a number");
+        }
     }
 
     private void runCommand(String input) {
@@ -54,18 +63,21 @@ public class InputManager {
                 cancelCommand();
                 break;
             default:
+                invalidCommand();
                 break;
         }
     }
 
     private void helpCommand() {
+        System.out.println();
         System.out.println(FileManager.readFromFile("help.txt"));
     }
 
     private void addCommand() {
+        System.out.println();
         String name = getInput("What is the name of the assignment: ");
         String className = getInput("What is the name of the class: ");
-        int year = getIntInput("What year is this due: ");
+        int year = getYear("What year is this due: ");
         int month = getIntInput("What month is this due (as a number, please): ");
         int day = getIntInput("What day of the month is this due: ");
         int hour = getIntInput("What hour is this due (use military time, please): ");
@@ -75,6 +87,17 @@ public class InputManager {
         addAssignment(name, className, date);
         FileManager.saveAssignments(assignments, assignmentsPath);
         System.out.println("Successfully added.");
+    }
+
+    private int getYear(String prompt) {
+        int year = getIntInput(prompt);
+        int validLowerYear = LocalDateTime.now().getYear() - 1;
+        int validUpperYear = LocalDateTime.now().getYear() + 1;
+        if(year < validLowerYear | year > validUpperYear) {
+            System.out.println("Sorry, " + year + "is not a valid year");
+            getYear(prompt);
+        }
+        return year;
     }
 
     private void dueCommand() {
@@ -88,6 +111,7 @@ public class InputManager {
     }
 
     private void completeCommand() {    
+        System.out.println();
         String assignmentDisplay = "";
         for (Assignment assignment : assignments) {
             String toAdd = "\n" + assignment.getId() + ". " + assignment.getName();
@@ -129,6 +153,11 @@ public class InputManager {
             }
         }
         return largest;
+    }
+
+    private void invalidCommand() {
+        System.out.println();
+        System.out.println("Sorry, I don't recognize that command.");
     }
 
 }
