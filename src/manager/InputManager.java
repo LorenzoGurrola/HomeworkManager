@@ -33,13 +33,7 @@ public class InputManager {
     private int getIntInput(String prompt) {
         System.out.println();
         System.out.println(prompt);
-        try {
-            int intInput = scanner.nextInt();
-            return intInput;
-        }
-        catch (InputMismatchException e) {
-            System.out.println("Please enter a number");
-        }
+        return scanner.nextInt();
     }
 
     private void runCommand(String input) {
@@ -75,6 +69,10 @@ public class InputManager {
 
     private void addCommand() {
         System.out.println();
+        String dueDate = getInput("Please enter the due date in the form (mm/dd)");
+
+        
+
         String name = getInput("What is the name of the assignment: ");
         String className = getInput("What is the name of the class: ");
         int year = getYear("What year is this due: ");

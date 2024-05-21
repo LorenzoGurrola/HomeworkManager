@@ -17,4 +17,8 @@ public class DateFormatter {
         int hours = duration.toHoursPart();
         return days + " days and " + hours + " hours";
     }
+
+    public static LocalDateTime convertToLocalDateTime(String date) {
+        
+    }
 }
